@@ -65,8 +65,8 @@ class MemoryGame {
     scrambleButtons(numberOfButtons) {
         // Pause for numberOfButtons seconds
         setTimeout(() => {
-            // Scramble buttons twice with a 2-second interval
-            for (let i = 0; i < 2; i++) {
+            // Scramble buttons thrice with a 2-second interval
+            for (let i = 0; i < 3; i++) {
                 setTimeout(() => this.scrambleOnce(), i * 2000);
             }
         }, numberOfButtons * 1000);
