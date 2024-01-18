@@ -80,6 +80,9 @@ class MemoryGame {
 
     scrambleOnce() {
         this.buttons.forEach(button => {
+            
+            this.windowWidth = window.innerWidth;
+            this.windowHeight = window.innerHeight;
             button.style.transition = ''; // Remove transition
 
             const randomX = Math.random() * (this.windowWidth - 150); // Adjusted for button size
