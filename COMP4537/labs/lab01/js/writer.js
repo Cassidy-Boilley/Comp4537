@@ -10,7 +10,7 @@ class Writer {
 
         this.displayNotes();
         setInterval(this.saveNotes.bind(this), 2000);
-        this.updateLastSavedTime(); 
+        
     }
 
     addNote() {
@@ -26,13 +26,13 @@ class Writer {
 
         this.notesContainer.appendChild(noteDiv);
 
-        this.updateLastSavedTime();
+        
         this.saveNotes();
     }
 
     removeNote(noteDiv) {
         noteDiv.remove();
-        this.updateLastSavedTime();
+        
         this.saveNotes();
     }
 
@@ -41,9 +41,8 @@ class Writer {
         const notes = Array.from(noteDivs).map(noteDiv => ({
             content: noteDiv.querySelector('textarea').value,
         }));
-
-        localStorage.setItem('notes', JSON.stringify(notes));
         this.updateLastSavedTime();
+        localStorage.setItem('notes', JSON.stringify(notes));
     }
 
     displayNotes() {
