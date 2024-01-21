@@ -10,6 +10,7 @@ class Writer {
 
         this.displayNotes();
         setInterval(this.saveNotes.bind(this), 2000);
+        this.updateLastSavedTime(); 
     }
 
     addNote() {
@@ -42,6 +43,7 @@ class Writer {
         }));
 
         localStorage.setItem('notes', JSON.stringify(notes));
+        this.updateLastSavedTime();
     }
 
     displayNotes() {
