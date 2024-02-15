@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary Search</title>
+</head>
+
+<body>
+    <h1>Search Definition</h1>
+    <label for="searchInput">Search Word:</label><br>
+    <input type="text" id="searchInput" name="searchInput" required><br>
+    <button onclick="searchDefinition()">Search</button>
+
+    <div id="searchResult"></div>
+
+    <script>
+        function searchDefinition() {
+            const searchTerm = document.getElementById("searchInput").value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", `https://yourDomainName2.wyz*/api/definitions/?word=${searchTerm}`);
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    document.getElementById("searchResult").textContent = `${response.word}: ${response.definition}`;
+                } else if (xhr.status === 404) {
+                    document.getElementById("searchResult").textContent = `Word '${searchTerm}' not found!`;
+                } else {
+                    document.getElementById("searchResult").textContent = "Error occurred while searching definition.";
+                }
+            };
+
+            xhr.send();
+        }
+    </script>
+</body>
+
+</html>

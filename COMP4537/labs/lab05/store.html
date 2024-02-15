@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary Store</title>
+</head>
+
+<body>
+    <h1>Create Definition</h1>
+    <form id="definitionForm">
+        <label for="wordInput">Word:</label><br>
+        <input type="text" id="wordInput" name="wordInput" required><br>
+        <label for="definitionInput">Definition:</label><br>
+        <textarea id="definitionInput" name="definitionInput" rows="4" cols="50" required></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <p id="feedback"></p>
+
+    <script>
+        document.getElementById("definitionForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const word = document.getElementById("wordInput").value;
+            const definition = document.getElementById("definitionInput").value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://yourDomainName2.wyz*/api/definitions");
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    document.getElementById("feedback").textContent = response.message;
+                } else {
+                    document.getElementById("feedback").textContent = "Error occurred while adding definition.";
+                }
+            };
+
+            xhr.send(JSON.stringify({ word: word, definition: definition }));
+        });
+    </script>
+</body>
+
+</html>
