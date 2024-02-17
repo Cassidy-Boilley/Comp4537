@@ -6,23 +6,48 @@ const endPointRoot = "/api/definitions"
 let dictionary = [];
 let totalResponses = 0;
 
-http.createServer(function (req, res) {
-  res.writeHead(200, {
-    "Content-Type": "text/html",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "*"
-  });
-  console.log(req.headers);
+class Word {
+  constructor(word, definition) {
+    this.word = word;
+    this.definition = definition;
+  }
+}
 
+// ChatGPT generated
+function findWord(wordToFind, wordsArray) {
+  console.log("Got this far")
+  for (let i = 0; i < wordsArray.length; i++) {
+    console.log("Word: " + wordsArray[i].word + "\n")
+    if (wordsArray[i].word === wordToFind) {
+      return wordsArray[i]; // Return the Word object if found
+    }
+  }
+  return null; // Return null if the word is not found
+}
+
+
+http.createServer(function (req, res) {
   if (req.method === GET) {
     // If the definition exists, send it
     // Otherwise, give an error
-    const query = url.parse(req.url, true);
-    const key = query.word;
-    const definition = dictionary[key];
-    if (definition) {
-      res.end(JSON.stringify({definition: definition, totalResponses: ++totalResponses}));
+    const word = url.parse(req.url, true);
+    const key = word.query["word"];
+    console.log("Key: " + key);
+    const target = findWord(key, dictionary);
+    if (target !== null) {
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*"
+      });
+      res.end(JSON.stringify({definition: target.definition, totalResponses: ++totalResponses}));
     } else {
+      res.writeHead(400, {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*"
+      });
+      totalResponses++;
       res.end("Definition not found");
     }
   }
@@ -42,17 +67,39 @@ http.createServer(function (req, res) {
 
         if (!isNaN(word) || word === '') {
           let failedResponse = "Word must be a non-empty string and can't be a number"
+          console.log("Failed because of bad request");
+          res.writeHead(400, {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*"
+          });
           res.end(JSON.stringify({failedResponse: failedResponse, totalResponses: ++totalResponses}));
           return;
         }
 
         if (word && definition) {
-            dictionary[word] = definition;
-            res.end(JSON.stringify({word: word, definition: definition, totalResponses: ++totalResponses}))
+          res.writeHead(200, {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*"
+          });
+          dictionary.push(new Word(word, definition));
+          res.end(JSON.stringify({word: word, definition: definition, totalResponses: ++totalResponses}))
         } else {
+            res.writeHead(400, {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "*"
+            });
+            console.log("Failed because of bad request");
             res.end(JSON.stringify({failedResponse: "Word or definition is empty", totalResponses: ++totalResponses}))
         }
       } catch (error) {
+        res.writeHead(500, {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        });
         res.end("Error parsing JSON data");
       }
     });

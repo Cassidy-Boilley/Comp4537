@@ -20,12 +20,12 @@
             const searchTerm = document.getElementById("searchInput").value;
 
             const xhr = new XMLHttpRequest();
-            xhr.open("GET", `http://localhost:8888/api/definitions/?word=${searchTerm}`);
+            xhr.open("GET", `http://localhost:8888/api/definitions?word=${searchTerm}`);
 
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
-                    document.getElementById("searchResult").textContent = `${response.word}: ${response.definition}`;
+                    document.getElementById("searchResult").textContent = `${searchTerm}: ${response.definition}`;
                 } else if (xhr.status === 404) {
                     document.getElementById("searchResult").textContent = `Word '${searchTerm}' not found!`;
                 } else {
