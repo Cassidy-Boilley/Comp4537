@@ -27,7 +27,7 @@
             const definition = document.getElementById("definitionInput").value;
 
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", `http://localhost:8888/api/definitions?word=${encodeURIComponent(word)}&definition=${encodeURIComponent(definition)}`);
+            xhr.open("POST", `https://comp4537-lab5.vercel.app/api/definitions?word=${encodeURIComponent(word)}&definition=${encodeURIComponent(definition)}`);
             xhr.setRequestHeader("Content-Type", "text/html");
 
             xhr.onload = function () {
