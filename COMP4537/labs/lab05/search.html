@@ -20,7 +20,7 @@
             const searchTerm = document.getElementById("searchInput").value;
 
             const xhr = new XMLHttpRequest();
-            xhr.open("GET", `https://comp4537-lab5.vercel.app/?word=${searchTerm}`);
+            xhr.open("GET", `https://comp4537-lab5.vercel.app/API/definitions?word=${searchTerm}`);
 
             xhr.onload = function () {
                 if (xhr.status === 200) {
