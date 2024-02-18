@@ -56,12 +56,12 @@ const server = http.createServer(function (req, res) {
     req.on('end', () => {
       try {
         console.log("Received POST data:", data); // Log the received data
-        const jsonData = JSON.parse(data);
-        const word = jsonData.word.trim();
-        const definition = jsonData.definition.trim();
+        const parsedUrl = url.parse(req.url, true);
+        const word = parsedUrl.query.word.trim();
+        const definition = parsedUrl.query.definition.trim();
 
-        if (!isNaN(word) || word === '') {
-          let failedResponse = "Word must be a non-empty string and can't be a number";
+        if (!word || !definition) {
+          let failedResponse = "Word and definition must be provided";
           console.log("Failed because of bad request");
           res.writeHead(400, {
             "Content-Type": "application/json",
@@ -72,31 +72,21 @@ const server = http.createServer(function (req, res) {
           return;
         }
 
-        if (word && definition) {
-          dictionary.push(new Word(word, definition));
-          res.writeHead(200, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "*"
-          });
-          res.end(JSON.stringify({ word: word, definition: definition, totalResponses: ++totalResponses }));
-        } else {
-          res.writeHead(400, {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "*"
-          });
-          console.log("Failed because of bad request");
-          res.end(JSON.stringify({ failedResponse: "Word or definition is empty", totalResponses: ++totalResponses }));
-        }
+        dictionary.push(new Word(word, definition));
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*"
+        });
+        res.end(JSON.stringify({ word: word, definition: definition, totalResponses: ++totalResponses }));
       } catch (error) {
-        console.error("Error parsing JSON data:", error); // Log any parsing errors
+        console.error("Error parsing POST data:", error); // Log any parsing errors
         res.writeHead(500, {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "*"
         });
-        res.end("Error parsing JSON data");
+        res.end("Error parsing POST data");
       }
     });
   }
