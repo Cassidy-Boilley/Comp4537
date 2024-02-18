@@ -1,5 +1,6 @@
 const http = require('http');
 const url = require('url');
+const querystring = require('querystring'); // Add querystring module
 const GET = 'GET';
 const POST = 'POST';
 const endPointRoot = "/api/definitions";
@@ -56,9 +57,9 @@ const server = http.createServer(function (req, res) {
     req.on('end', () => {
       try {
         console.log("Received POST data:", data); // Log the received data
-        const parsedUrl = url.parse(req.url, true);
-        const word = parsedUrl.query.word.trim();
-        const definition = parsedUrl.query.definition.trim();
+        const parsedData = querystring.parse(data); // Parse the data using querystring
+        const word = parsedData.word ? parsedData.word.trim() : '';
+        const definition = parsedData.definition ? parsedData.definition.trim() : '';
 
         if (!word || !definition) {
           let failedResponse = "Word and definition must be provided";
@@ -94,5 +95,5 @@ const server = http.createServer(function (req, res) {
 
 // Listen on port 8888
 server.listen(8081, () => {
-  console.log('Server running at https://comp4537-lab5.vercel.app');
+  console.log('Server running at http://localhost:8081/');
 });
