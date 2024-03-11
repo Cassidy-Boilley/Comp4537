@@ -42,7 +42,7 @@
         }
 
         async function insertPatient(patient) {
-            const response = await fetch('http://localhost:8888/lab5/api/v1/sql', {
+            const response = await fetch('https://comp4537labs.com/lab5/api/v1/sql', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,7 +69,7 @@
 
             if (queryType === 'SELECT') {
                 // Remove body for GET requests
-                fetch(`http://localhost:8888/lab5/api/v1/sql?query=${encodeURIComponent(sqlQuery)}`, requestOptions)
+                fetch(`https://comp4537labs.com/lab5/api/v1/sql?query=${encodeURIComponent(sqlQuery)}`, requestOptions)
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('queryResponse').textContent = JSON.stringify(data);
@@ -81,7 +81,7 @@
                 // Add body for POST requests
                 requestOptions.body = JSON.stringify({ query: sqlQuery });
 
-                fetch('http://localhost:8888/lab5/api/v1/sql', requestOptions)
+                fetch('https://comp4537labs.com/lab5/api/v1/sql', requestOptions)
                     .then(response => response.text())
                     .then(data => {
                         document.getElementById('queryResponse').textContent = data;
