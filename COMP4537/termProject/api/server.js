@@ -117,4 +117,58 @@ app.get('/roles', async (req, res) => {
     }
 });
 
-app.get('/checkuser', async (req, res) =
+app.get('/checkuser', async (req, res) => {
+    const { username, email } = req.query;
+    try {
+        const result = await pool.query('SELECT COUNT(*) AS usernameCount, COUNT(*) AS emailCount FROM users WHERE username = $1 OR email = $2', [username, email]);
+        const { usernameCount, emailCount } = result.rows[0];
+        res.status(200).json({ usernameUnique: usernameCount === 0, emailUnique: emailCount === 0 });
+    } catch (error) {
+        console.error("Error checking username and email: " + error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.post('/api_call', async (req, res) => {
+    const { username } = req.body;
+    try {
+        await pool.query('UPDATE api_calls SET call_count = call_count + 1 WHERE user_name = $1', [username]);
+        res.status(200).json({ message: 'API call count updated successfully' });
+    } catch (error) {
+        console.error("Error updating API call count: " + error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.get('/users', async (req, res) => {
+    const roleID = req.query.role_id;
+    if (roleID !== '2') {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    try {
+        const result = await pool.query(`
+            SELECT u.username, u.email, u.role_id, COALESCE(a.api_call_count, 0) AS api_call_count
+            FROM users u
+            LEFT JOIN (
+                SELECT user_name, COUNT(*) AS api_call_count
+                FROM api_calls
+                GROUP BY user_name
+            ) a ON u.username = a.user_name
+        `);
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error fetching users:", error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server listening at http://localhost:${port}`);
+});
+
+process.on("SIGINT", () => {
+    pool.end();
+    console.log("Server stopped. Database connection closed.");
+    process.exit();
+});
