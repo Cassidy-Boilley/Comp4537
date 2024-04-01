@@ -9,7 +9,7 @@
 
 <body>
     <h2>User Registration</h2>
-    <form id="registrationForm" action="https://comp4537-ob9z.vercel.app/register" method="POST">
+    <form id="registrationForm" action="https://comp4537-axwz.vercel.app/register" method="POST">
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username">
@@ -40,7 +40,7 @@
             console.log('Form Data:', formData);
             const username = formData.get('username');
             const email = formData.get('email');
-            const response = await fetch(`https://comp4537-ob9z.vercel.app/checkuser?username=${username}&email=${email}`);
+            const response = await fetch(`https://comp4537-axwz.vercel.app/checkuser?username=${username}&email=${email}`);
             const data = await response.json();
 
             if (!data.usernameUnique) {
@@ -58,7 +58,7 @@
             }
 
             // Send a POST request to the server to handle registration
-            await fetch('https://comp4537-ob9z.vercel.app/register', {
+            await fetch('https://comp4537-axwz.vercel.app/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
