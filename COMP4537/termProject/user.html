@@ -24,19 +24,18 @@
             const data = { text: textInputValue };
 
             // Send data as JSON to the specified URL
-            fetch('https://comp4537labs.com/project/answer', {
+            fetch('/project/answer', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
             })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Text sent successfully!');
-                    } else {
-                        alert('Failed to send text.');
-                    }
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result);
+                    // Handle the response here
+                    alert('Response: ' + result.response);
                 })
                 .catch(error => {
                     console.error('Error:', error);
