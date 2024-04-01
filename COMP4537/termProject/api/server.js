@@ -163,6 +163,22 @@ app.get('/users', async (req, res) => {
     }
 });
 
+app.use('/register', setHeaders);
+app.use('/login', setHeaders);
+app.use('/roles', setHeaders);
+app.use('/checkuser', setHeaders);
+app.use('/api_call', setHeaders);
+app.use('/users', setHeaders);
+
+// Function to set headers for routes
+function setHeaders(req, res, next) {
+    res.set({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+    });
+    next();
+}
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 });
