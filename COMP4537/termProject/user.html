@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Screen</title>
+</head>
+
+<body>
+    <h2>User Screen</h2>
+    <form id="textInputForm">
+        <label for="textInput">Enter Text:</label>
+        <input type="text" id="textInput" name="textInput">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('textInputForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            const textInputValue = document.getElementById('textInput').value;
+            alert('You entered: ' + textInputValue);
+        });
+    </script>
+</body>
+
+</html>

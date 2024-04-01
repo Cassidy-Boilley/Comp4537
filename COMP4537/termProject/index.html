@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+
+<body>
+    <h2>User Registration</h2>
+    <form id="registrationForm" action="http://localhost:3000/register" method="POST">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+            <div id="usernameError" style="color: red;"></div>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <div id="emailError" style="color: red;"></div>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+        </div>
+        <div>
+            <button type="submit" id="registerButton">Register</button>
+        </div>
+    </form>
+
+
+    <script>
+        
+        document.getElementById('registrationForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            
+            // Fetch the form data
+            const formData = new FormData(this);
+            console.log('Form Data:', formData);
+            const username = formData.get('username');
+            const email = formData.get('email');
+            const response = await fetch(`http://localhost:3000/checkuser?username=${username}&email=${email}`);
+            const data = await response.json();
+
+            if (!data.usernameUnique) {
+                document.getElementById('usernameError').innerText = 'Username already exists';
+                return;
+            } else {
+                document.getElementById('usernameError').innerText = '';
+            }
+
+            if (!data.emailUnique) {
+                document.getElementById('emailError').innerText = 'Email already exists';
+                return;
+            } else {
+                document.getElementById('emailError').innerText = '';
+            }
+
+            // Send a POST request to the server to handle registration
+            await fetch('http://localhost:3000/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: formData.get('password')})
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Registration successful
+                        alert('Registration successful');
+                        window.location.href = '/login.html'; // Redirect to login page
+                    } else {
+                        // Registration failed
+                        alert('Registration failed. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again later.');
+                });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+    <h2>Admin Dashboard</h2>
+    <div id="userList"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchUsers();
+        });
+
+        async function fetchUsers() {
+            try {
+                const response = await fetch('http://localhost:3000/users');
+                const data = await response.json();
+                const role = data.role; // Assuming the role is returned from the server
+                if (role === 'admin') {
+                    displayUsers(data.users);
+                } else {
+                    alert('You do not have permission to access this page.');
+                    window.location.href = '/user.html'; // Redirect to user page
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                displayErrorAlert('An error occurred while fetching users.');
+            }
+        }
+
+        function displayUsers(users) {
+            const userListDiv = document.getElementById('userList');
+            userListDiv.innerHTML = ''; // Clear previous content
+
+            const table = document.createElement('table');
+            const headerRow = table.insertRow();
+            const headers = ['Username', 'Email', 'Role ID', 'API Calls'];
+            headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                headerRow.appendChild(th);
+            });
+
+            users.forEach(user => {
+                const row = table.insertRow();
+                const userData = [user.username, user.email, user.role_id, user.api_call_count];
+                userData.forEach(text => {
+                    const cell = row.insertCell();
+                    cell.textContent = text;
+                });
+            });
+
+            userListDiv.appendChild(table);
+        }
+
+        function displayErrorAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert';
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+        }
+    </script>
+
+    <style>
+        .alert {
+            background-color: #f44336;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            width: 30%;
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            border-radius: 5px;
+        }
+    </style>
+</body>
+
+</html>
