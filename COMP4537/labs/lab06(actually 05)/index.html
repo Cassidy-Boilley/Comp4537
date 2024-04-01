@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client</title>
+</head>
+
+<body>
+    <h1>Client</h1>
+
+    <button type="button" onclick="insertAll()">Insert All Patients</button>
+
+    <div id="insertResponse"></div>
+
+    <form id="queryForm">
+        <textarea id="sqlQuery" placeholder="Enter SQL query"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <div id="queryResponse"></div>
+
+    <script>
+        async function insertAll() {
+            const patients = [
+                { name: 'Sara Brown', dob: '1901-01-01' },
+                { name: 'John Smith', dob: '1941-01-01' },
+                { name: 'Jack Ma', dob: '1961-01-30' },
+                { name: 'Elon Musk', dob: '1999-01-01' }
+            ];
+
+            for (const patient of patients) {
+                try {
+                    await insertPatient(patient);
+                    document.getElementById('insertResponse').textContent = 'Patient inserted successfully: ' + patient.name;
+                } catch (error) {
+                    console.error('Error:', error);
+                    document.getElementById('insertResponse').textContent = 'Error inserting patient ' + patient.name + ': ' + error.message;
+                }
+            }
+        }
+
+        async function insertPatient(patient) {
+            const response = await fetch('https://comp4537labs.com/lab5/api/v1/sql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: `INSERT INTO PATIENTS (name, dob) VALUES ('${patient.name}', '${patient.dob}')` }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to insert patient ' + patient.name);
+            }
+        }
+
+        document.getElementById('queryForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const sqlQuery = document.getElementById('sqlQuery').value.trim();
+            const queryType = sqlQuery.toUpperCase().startsWith('SELECT') ? 'SELECT' : 'INSERT';
+
+            const requestOptions = {
+                method: queryType === 'SELECT' ? 'GET' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+
+            if (queryType === 'SELECT') {
+                // Remove body for GET requests
+                fetch(`https://comp4537labs.com/lab5/api/v1/sql?query=${encodeURIComponent(sqlQuery)}`, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('queryResponse').textContent = JSON.stringify(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                // Add body for POST requests
+                requestOptions.body = JSON.stringify({ query: sqlQuery });
+
+                fetch('https://comp4537labs.com/lab5/api/v1/sql', requestOptions)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('queryResponse').textContent = data;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+        });
+    </script>
+</body>
+
+</html>
