@@ -48,9 +48,9 @@
                 })
                 .then(data => {
                     if (data.role === 'user') {
-                        window.location.href = '/user.html'; // Redirect to user page
+                        window.location.href = './user.html'; // Redirect to user page
                     } else if (data.role === 'admin') {
-                        window.location.href = '/admin.html'; // Redirect to admin page
+                        window.location.href = './admin.html'; // Redirect to admin page
                     } else {
                         throw new Error('Invalid role');
                     }
