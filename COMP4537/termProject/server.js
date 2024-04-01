@@ -23,8 +23,60 @@ connection.connect((err) => {
         return;
     }
 
-    
+    // Create tables after successful connection
+    createTables();
 });
+
+function createTables() {
+    // SQL queries to create tables
+    const createRolesTableQuery = `
+        CREATE TABLE IF NOT EXISTS roles (
+            id INT PRIMARY KEY,
+            title VARCHAR(255),
+            description TEXT
+        )
+    `;
+    const createUsersTableQuery = `
+        CREATE TABLE IF NOT EXISTS users (
+            username VARCHAR(255) PRIMARY KEY,
+            password VARCHAR(255),
+            role_id INT,
+            FOREIGN KEY (role_id) REFERENCES roles(id)
+        )
+    `;
+    const createApiCallsTableQuery = `
+        CREATE TABLE IF NOT EXISTS api_calls (
+            user_name VARCHAR(255),
+            call_count INT,
+            FOREIGN KEY (user_name) REFERENCES users(username)
+        )
+    `;
+
+    // Execute the SQL queries to create tables
+    connection.query(createRolesTableQuery, (err, result) => {
+        if (err) {
+            console.log("Error creating roles table: " + err.message);
+        } else {
+            console.log("Roles table created successfully");
+        }
+    });
+
+    connection.query(createUsersTableQuery, (err, result) => {
+        if (err) {
+            console.log("Error creating users table: " + err.message);
+        } else {
+            console.log("Users table created successfully");
+        }
+    });
+
+    connection.query(createApiCallsTableQuery, (err, result) => {
+        if (err) {
+            console.log("Error creating api_calls table: " + err.message);
+        } else {
+            console.log("Api_calls table created successfully");
+        }
+    });
+}
 
 // Middleware to parse JSON bodies
 app.use(express.json());
