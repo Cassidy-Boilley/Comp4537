@@ -18,15 +18,9 @@
 
         async function fetchUsers() {
             try {
-                const response = await fetch('http://localhost:3000/users');
+                const response = await fetch('https://term-project4537.vercel.app/users');
                 const data = await response.json();
-                const role = data.role; // Assuming the role is returned from the server
-                if (role === 'admin') {
-                    displayUsers(data.users);
-                } else {
-                    alert('You do not have permission to access this page.');
-                    window.location.href = './user.html'; // Redirect to user page
-                }
+                displayUsers(data.users);
             } catch (error) {
                 console.error('Error fetching users:', error);
                 displayErrorAlert('An error occurred while fetching users.');

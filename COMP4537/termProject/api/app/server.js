@@ -2,13 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 const port = 3000;
 
 // Connect to MongoDB using the provided connection string
-mongoose.connect('mongodb+srv://cboilley:1mK0a1ZQShgmQEns@moodboosterdb.tsll7p5.mongodb.net/', {
-    dbName: 'moodboosterdata'
+mongoose.connect(process.env.MONGODB_CONNECTIONSTRING, {
+    dbName: process.env.MONGODB_DBNAME
   
 });
 
@@ -20,6 +21,7 @@ const rolesSchema = new mongoose.Schema({
 
 const usersSchema = new mongoose.Schema({
   username: { type: String, unique: true },
+  email: { type: String, unique: true },
   password: String,
   role_id: Number
 });
@@ -83,8 +85,11 @@ app.post('/login', async (req, res) => {
     // Compare passwords
     const match = await bcrypt.compare(password, user.password);
     if (match) {
-      console.log("Login successful");
-      res.status(200).json({ message: 'Login successful', role: 'user' });
+      // Check the role of the user
+      const role = user.role_id === 1 ? 'user' : 'admin';
+      
+      
+      res.status(200).json({ message: 'Login successful', role });
     } else {
       res.status(401).json({ error: 'Invalid username or password' });
     }
@@ -93,6 +98,7 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 // Route to check if a username or email already exists
 app.get('/checkuser', async (req, res) => {
@@ -106,6 +112,39 @@ app.get('/checkuser', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+// Route to get user information including API call count
+app.get('/users', async (req, res) => {
+  try {
+    // Retrieve user information from the database
+    const users = await User.find({}, { password: 0 });
+
+    // Fetch API call count for each user
+    const usersWithApiCalls = await Promise.all(users.map(async user => {
+      // Find the corresponding API call record for the user
+      const apiCall = await ApiCall.findOne({ user_name: user.username });
+      
+      // If API call record found, get the call count, otherwise set it to 0
+      const apiCallCount = apiCall ? apiCall.call_count : 0;
+      
+      // Convert Mongoose document to plain JavaScript object
+      const userData = user.toObject();
+      
+      // Add API call count to user object
+      userData.api_call_count = apiCallCount;
+      
+      return userData;
+    }));
+
+    // Send the role along with the user data
+    const role = usersWithApiCalls.length > 0 && usersWithApiCalls[0].role_id === 1 ? 'user' : 'admin';
+    res.status(200).json({ users: usersWithApiCalls, role });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
