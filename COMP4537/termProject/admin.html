@@ -10,6 +10,7 @@
 <body>
     <h2>Admin Dashboard</h2>
     <div id="userList"></div>
+    <button id="userPageButton">Go to User Page</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -58,6 +59,11 @@
             alertDiv.textContent = message;
             document.body.appendChild(alertDiv);
         }
+
+        // Add event listener for the button to redirect to user.html
+        document.getElementById('userPageButton').addEventListener('click', () => {
+            window.location.href = './user.html';
+        });
     </script>
 
     <style>
