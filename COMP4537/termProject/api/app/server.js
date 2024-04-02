@@ -36,14 +36,9 @@ const ApiCall = mongoose.model('ApiCall', apiCallsSchema);
 app.use(cors());
 app.use(express.json());
 
-// Middleware to hash passwords before saving users to MongoDB
-usersSchema.pre('save', async function(next) {
-  if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
-  next();
-});
 
+
+// Route for user registration
 // Route for user registration
 app.post('/register', async (req, res) => {
   try {
@@ -54,14 +49,15 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Username, email, and password are required' });
     }
 
-      // Save the user to the database
-      console.log(username, email, password)
-      const user = new User({ username, email, password, role_id: 1 });
-      const apiUser = new ApiCall({ user_name: username, call_count: 0 });
-      
-      console.log(user)
-      await user.save();
-      await apiUser.save();
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Save the user to the database with the hashed password
+    const user = new User({ username, email, password: hashedPassword, role_id: 1 });
+    const apiUser = new ApiCall({ user_name: username, call_count: 0 });
+
+    await user.save();
+    await apiUser.save();
 
     console.log("User registered successfully");
     res.status(201).json({ message: 'User registered successfully' });
@@ -70,6 +66,7 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 // Route for user login
 app.post('/login', async (req, res) => {
