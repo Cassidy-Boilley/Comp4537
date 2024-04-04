@@ -33,9 +33,9 @@
             })
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result);
+                    console.log(result.response.generated_text);
                     // Handle the response here
-                    alert('Response: ' + result.response);
+                    alert('Response: ' + result.response.generated_text);
                 })
                 .catch(error => {
                     console.error('Error:', error);
