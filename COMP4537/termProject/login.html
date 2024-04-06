@@ -9,7 +9,7 @@
 
 <body>
     <h2>User Login</h2>
-    <form id="loginForm">
+    <form id="loginForm" action="https://term-project4537.vercel.app/login" method="POST">
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -22,48 +22,47 @@
             <button type="submit">Login</button>
         </div>
     </form>
-</body>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('loginForm').addEventListener('submit', loginUser);
-    });
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
 
-    function loginUser(event) {
-        event.preventDefault(); // Prevent the form from submitting normally
-        const xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
+            // Fetch the form data
+            const formData = new FormData(this);
 
-        // Fetch the form data
-        const formData = new FormData(document.getElementById('loginForm'));
-        const username = formData.get('username');
-        const password = formData.get('password');
-
-        // Send a POST request to the server to handle login
-        xhr.open('POST', 'https://term-project4537.vercel.app/login', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify({ username, password }));
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    const role = response.role;
-                    console.log('User role:', role);
-                    // Redirect or perform actions based on the role
-                    if (role === 'user') {
-                        window.location.href = './user.html';
-                    } else if (role === 'admin') {
-                        window.location.href = './admin.html';
+            // Send a POST request to the server to handle login
+            fetch('https://term-project4537.vercel.app/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username: formData.get('username'),
+                password: formData.get('password')})
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Invalid username or password. Please try again.');
                     }
-                } else {
-                    console.error('Error logging in:', xhr.responseText);
-                    // Handle error cases, such as displaying error messages to the user
-                }
-            }
-        };
-    }
-</script>
+                })
+                .then(data => {
+                    console.log('Login successful:', data);
+                    if (data.role === 'user') {
+                        window.location.href = './user.html'; // Redirect to user page
+                    } else if (data.role === 'admin') {
+                        window.location.href = './admin.html'; // Redirect to admin page
+                    } else {
+                        throw new Error('Invalid role');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again later.');
+                });
 
+        });
+    </script>
+</body>
 
 </html>
