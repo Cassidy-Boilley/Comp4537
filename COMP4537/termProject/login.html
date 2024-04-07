@@ -44,14 +44,14 @@
                         const response = JSON.parse(xhr.responseText);
                         const role = response.role;
                         const token = response.token; // Get the token from the response
-                        document.cookie = `token=${token}; path=/; max-age=3600; secure; HttpOnly`;
+                        sessionStorage.setItem('token', token); // Store the token in session storage
                         console.log('User role:', role);
                         // Redirect or perform actions based on the role
-                        if (role === 'user') {
-                            window.location.href = './user.html';
-                        } else if (role === 'admin') {
-                            window.location.href = './admin.html';
-                        }
+                        // if (role === 'user') {
+                        //     window.location.href = './user.html';
+                        // } else if (role === 'admin') {
+                        //     window.location.href = './admin.html';
+                        // }
                     } else {
                         console.error('Error logging in:', xhr.responseText);
                         // Handle login error
