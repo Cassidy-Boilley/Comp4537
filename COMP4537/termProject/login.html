@@ -1,65 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Login</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <h2>User Login</h2>
     <form id="loginForm">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div>
-            <button type="submit">Login</button>
-        </div>
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div>
+        <button type="submit">Login</button>
+      </div>
     </form>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function (event) {
-            sessionStorage.clear(); // Clear any existing tokens
-            event.preventDefault(); // Prevent the form from submitting normally
-            const xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
-            // Fetch the form data
-            const formData = new FormData(this);
-            const username = formData.get('username');
-            const password = formData.get('password');
-            // Send a POST request to the server to handle login
-            xhr.open('POST', 'https://term-project4537.vercel.app/login', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify({ username, password }));
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          sessionStorage.clear(); // Clear any existing tokens
+          event.preventDefault(); // Prevent the form from submitting normally
+          const xhr = new XMLHttpRequest();
+          xhr.withCredentials = true;
+          // Fetch the form data
+          const formData = new FormData(this);
+          const username = formData.get("username");
+          const password = formData.get("password");
+          // Send a POST request to the server to handle login
+          xhr.open("POST", "https://term-project4537.vercel.app/login", true);
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.send(JSON.stringify({ username, password }));
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        const response = JSON.parse(xhr.responseText);
-                        const role = response.role;
-                        const token = response.token; // Get the token from the response
-                        sessionStorage.setItem('token', token); // Store the token in session storage
-                        console.log('User role:', role);
-                        // Redirect or perform actions based on the role
-                        if (role === 'user') {
-                            window.location.href = './user.html';
-                        } else if (role === 'admin') {
-                            window.location.href = './admin.html';
-                        }
-                    } else {
-                        console.error('Error logging in:', xhr.responseText);
-                        // Handle login error
-                    }
-                }
-            };
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+              if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                const role = response.role;
+                const token = response.token; // Get the token from the response
+                sessionStorage.setItem("token", token); // Store the token in session storage
+                console.log("User role:", role);
+                // Redirect or perform actions based on the role
+                setTimeout(function () {
+                  if (role === "user") {
+                    window.location.href = "./user.html";
+                  } else if (role === "admin") {
+                    window.location.href = "./admin.html";
+                  }
+                }, 10000);
+              } else {
+                console.error("Error logging in:", xhr.responseText);
+                // Handle login error
+              }
+            }
+          };
         });
     </script>
-</body>
-
+  </body>
 </html>
