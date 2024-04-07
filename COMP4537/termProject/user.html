@@ -49,12 +49,12 @@
         document.getElementById('textInputForm').addEventListener('submit', function (event) {
 
             const chatArea = document.getElementById("chatArea");
+            const textInputValue = document.getElementById('textInput').value;
             const userInput = `<p>You: ${textInputValue} <p>`;
             chatArea.innerHTML += userInput
 
             const maxAPIcalls = 20;
             event.preventDefault(); // Prevent the form from submitting normally
-            const textInputValue = document.getElementById('textInput').value;
 
             // Hide the submit button and show the loading spinner
             document.getElementById('submitButton').style.display = 'none';
