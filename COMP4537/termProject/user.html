@@ -41,11 +41,17 @@
         <!-- Loading spinner -->
         <div class="spinner" id="loadingSpinner"></div>
         <div id="apiCountContainer">Remaining API calls: </div>
+        <div id="chatArea"></div>
 
     </form>
 
     <script>
         document.getElementById('textInputForm').addEventListener('submit', function (event) {
+
+            const chatArea = document.getElementById("chatArea");
+            const userInput = `<p>You: ${textInputValue} <p>`;
+            chatArea.innterHTML += userInput
+
             const maxAPIcalls = 20;
             event.preventDefault(); // Prevent the form from submitting normally
             const textInputValue = document.getElementById('textInput').value;
@@ -71,6 +77,9 @@
                     console.log(result);
                     // Display the generated text to the user
                     alert('Generated Text: ' + result.response[0].generated_text);
+
+                    const LLMresponse = `<p>AI: ${result.response[0].generated_text} <p>`
+                    chatArea.innterHTML += userInput
 
                     // Update the remaining API calls count
                     const remainingCalls = maxAPIcalls - Number(result.apiCount);
