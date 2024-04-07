@@ -44,7 +44,7 @@
                         const response = JSON.parse(xhr.responseText);
                         const role = response.role;
                         const token = response.token; // Get the token from the response
-                        sessionStorage.setItem('token', token); // Store the token in session storage
+                        document.cookie = `token=${token}; path=/; max-age=3600; secure; HttpOnly`;
                         console.log('User role:', role);
                         // Redirect or perform actions based on the role
                         if (role === 'user') {
