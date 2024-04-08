@@ -20,8 +20,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function handleTextInput(event) {
     event.preventDefault();
     const textInputValue = document.getElementById('textInput').value;
+    const scrollable = document.getElementById('conversation');
+    const newInputMessage = document.createElement('p')
+    newInputMessage.textContent = "You: " + textInputValue
+    scrollable.appendChild(newInputMessage)
     showLoadingSpinner(); // Show spinner
-    await makeAPICall(textInputValue);
+    const textOutputValue = await makeAPICall(textInputValue);
+    const newOutputMessage = document.createElement('p')
+    newOutputMessage.textContent = "Ai: " + textOutputValue
+    scrollable.appendChild(newOutputMessage)
     hideLoadingSpinner(); // Hide spinner
 }
 

@@ -5,6 +5,12 @@ body {
     padding: 0;
 }
 
+.scrollable {
+    height: 500px; /* or any value */
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 h2 {
     text-align: center;
     margin-top: 30px;
