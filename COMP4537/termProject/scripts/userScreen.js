@@ -46,7 +46,6 @@ async function makeAPICall(textInputValue) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include',
             body: JSON.stringify(data),
             credentials: 'include' // Include credentials
         });

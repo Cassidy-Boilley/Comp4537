@@ -52,21 +52,21 @@ async function registerUser(formData) {
         alert('An error occurred. Please try again later.');
     }
 }
-document.addEventListener('DOMContentLoaded', function () {
-    const xhr = new XMLHttpRequest()
-    xhr.withCredentials = true;
-    xhr.open('GET', `${BASEURL}/check-session`, true);
-    xhr.send()
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText)
-                if (response.session = true) {
-                    window.location.href = "./user.html"
-                }
-            }
-        }
-    }
-});
+// document.addEventListener('DOMContentLoaded', function () {
+//     const xhr = new XMLHttpRequest()
+//     xhr.withCredentials = true;
+//     xhr.open('GET', `${BASEURL}/check-session`, true);
+//     xhr.send()
+//     xhr.onreadystatechange = function () {
+//         if (xhr.readyState === 4) {
+//             if (xhr.status === 200) {
+//                 const response = JSON.parse(xhr.responseText)
+//                 if (response.session = true) {
+//                     window.location.href = "./user.html"
+//                 }
+//             }
+//         }
+//     }
+// });
 // Event listener for registration form submission
 document.getElementById('registrationForm').addEventListener('submit', handleRegistration);
