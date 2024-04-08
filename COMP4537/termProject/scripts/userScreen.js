@@ -52,7 +52,7 @@ async function makeAPICall(textInputValue) {
         const result = await response.json();
         alert('Generated Text: ' + result.response[0].generated_text);
         const remainingCalls = maxAPIcalls - Number(result.apiCount);
-        updateApiCount(remainingCalls);
+        document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + remainingCalls; // Update displayed count
         if (remainingCalls === 0) {
             document.getElementById('submitButton').disabled = true;
             alert('You have reached the maximum number of API calls.');
@@ -61,10 +61,6 @@ async function makeAPICall(textInputValue) {
         console.error('Error:', error);
         alert('An error occurred. Please try again later.');
     }
-}
-
-function updateApiCount(count) {
-    document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + count;
 }
 
 // Event listener for text input form submission
