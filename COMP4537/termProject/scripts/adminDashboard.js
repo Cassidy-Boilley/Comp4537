@@ -5,11 +5,8 @@ const BASEURL = "https://term-project4537.vercel.app";
 
 async function fetchUsers() {
     try {
-        const token = sessionStorage.getItem('token');
         const response = await fetch(`${BASEURL}/users`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            credentials: 'include' // Include credentials in the request
         });
         if (response.status === 200) {
             const data = await response.json();

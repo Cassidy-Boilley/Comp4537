@@ -5,9 +5,7 @@ const BASEURL = "https://term-project4537.vercel.app";
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch(`${BASEURL}/api-count`, {
-            headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-            }
+            credentials: 'include'
         });
         const { apiCount } = await response.json();
         updateApiCount(apiCount);
@@ -47,9 +45,10 @@ async function makeAPICall(textInputValue) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             },
-            body: JSON.stringify(data)
+            credentials: 'include',
+            body: JSON.stringify(data),
+            credentials: 'include' // Include credentials
         });
         const result = await response.json();
         alert('Generated Text: ' + result.response[0].generated_text);
