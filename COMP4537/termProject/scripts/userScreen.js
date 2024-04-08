@@ -1,6 +1,6 @@
 // const BASEURL = "http://localhost:3000";
 const BASEURL = "https://term-project4537.vercel.app";
-
+const MAXAPICALLS = 20;
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -38,7 +38,7 @@ function hideLoadingSpinner() {
 }
 
 async function makeAPICall(textInputValue) {
-    const maxAPIcalls = 20;
+    
     const data = { text: textInputValue };
     try {
         const response = await fetch(`${BASEURL}/api-call`, {
