@@ -52,11 +52,7 @@ async function makeAPICall(textInputValue) {
         });
         const result = await response.json();
         alert('Generated Text: ' + result.response[0].generated_text);
-        const scrollable = document.getElementById('conversation');
-        const newOutputMessage = document.createElement('p')
-        newOutputMessage.textContent = "Ai: " + result.response[0].generated_text
         const remainingCalls = maxAPIcalls - Number(result.apiCount);
-        scrollable.appendChild(newOutputMessage)
         updateApiCount(remainingCalls);
         if (remainingCalls === 0) {
             document.getElementById('submitButton').disabled = true;
