@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             credentials: 'include'
         });
         const { apiCount } = await response.json();
-        document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + apiCount;
+        document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + apiCount - MAXAPICALLS;
     } catch (error) {
         console.error('Error:', error);
         alert('An error occurred while fetching the API count. Please try again later.');
@@ -52,7 +52,7 @@ async function makeAPICall(textInputValue) {
         const result = await response.json();
         alert('Generated Text: ' + result.response[0].generated_text);
         const remainingCalls = maxAPIcalls - Number(result.apiCount);
-        document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + remainingCalls; // Update displayed count
+        document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + MAXAPICALLS; // Update displayed count
         if (remainingCalls === 0) {
             document.getElementById('submitButton').disabled = true;
             alert('You have reached the maximum number of API calls.');
