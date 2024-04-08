@@ -1,6 +1,6 @@
 // const BASEURL = "http://localhost:3000";
 const BASEURL = "https://term-project4537.vercel.app";
-const MAXAPICALLS = 20;
+Number(MAXAPICALLS) = 20;
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
