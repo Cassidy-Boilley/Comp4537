@@ -1,4 +1,7 @@
-const BASEURL = "http://localhost:3000";
+// const BASEURL = "http://localhost:3000";
+const BASEURL = "https://term-project4537.vercel.app";
+
+
 
 async function fetchUsers() {
     try {

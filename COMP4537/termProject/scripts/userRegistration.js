@@ -1,7 +1,8 @@
-const BASEURL = "http://localhost:3000";
+// const BASEURL = "http://localhost:3000";
+const BASEURL = "https://term-project4537.vercel.app";
 
 async function handleRegistration(event) {
-    
+
 
     event.preventDefault();
     const formData = new FormData(document.getElementById('registrationForm'));

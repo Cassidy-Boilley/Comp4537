@@ -1,4 +1,6 @@
-const BASEURL = "http://localhost:3000";
+// const BASEURL = "http://localhost:3000";
+const BASEURL = "https://term-project4537.vercel.app";
+
 
 function handleLogin(event) {
     event.preventDefault();
