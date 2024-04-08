@@ -1,6 +1,6 @@
 // const BASEURL = "http://localhost:3000";
 const BASEURL = "https://term-project4537.vercel.app";
-Number(MAXAPICALLS) = 20;
+const maxAPIcalls = 20;
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             credentials: 'include'
         });
         const { apiCount } = await response.json();
-        document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' +  MAXAPICALLS - Number(apiCount);
+        updateApiCount(apiCount);
     } catch (error) {
         console.error('Error:', error);
         alert('An error occurred while fetching the API count. Please try again later.');
@@ -50,9 +50,9 @@ async function makeAPICall(textInputValue) {
             credentials: 'include' // Include credentials
         });
         const result = await response.json();
-        alert('Generated Text: ' + result.response[0].generated_text);
-        const remainingCalls = maxAPIcalls - Number(result.apiCount);
-        document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + MAXAPICALLS; // Update displayed count
+        
+       
+        updateApiCount(Number(result.apiCount));
         if (remainingCalls === 0) {
             document.getElementById('submitButton').disabled = true;
             alert('You have reached the maximum number of API calls.');
@@ -61,6 +61,10 @@ async function makeAPICall(textInputValue) {
         console.error('Error:', error);
         alert('An error occurred. Please try again later.');
     }
+}
+
+function updateApiCount(currentCalls) {
+    document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + maxAPIcalls - currentCalls;
 }
 
 // Event listener for text input form submission
