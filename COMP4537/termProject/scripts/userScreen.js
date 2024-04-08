@@ -38,7 +38,6 @@ function hideLoadingSpinner() {
 }
 
 async function makeAPICall(textInputValue) {
-    
     const data = { text: textInputValue };
     try {
         const response = await fetch(`${BASEURL}/api-call`, {
@@ -50,8 +49,17 @@ async function makeAPICall(textInputValue) {
             credentials: 'include' // Include credentials
         });
         const result = await response.json();
-        
-       
+
+        // Store the response in session storage
+        sessionStorage.setItem('apiResponse', JSON.stringify(result));
+
+        // Append the response to the conversation
+        const scrollable = document.getElementById('conversation');
+        const newResponseMessage = document.createElement('p');
+        newResponseMessage.textContent = "Response: " + result.response[0].generated_text;
+        scrollable.appendChild(newResponseMessage);
+
+        // Update API count
         let remainingCalls = updateApiCount(Number(result.apiCount));
         if (remainingCalls === 0) {
             document.getElementById('submitButton').disabled = true;
