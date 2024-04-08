@@ -26,24 +26,40 @@ async function fetchUsers() {
 function displayUsers(users) {
     const userListDiv = document.getElementById('userList');
     userListDiv.innerHTML = '';
-    const table = document.createElement('table');
-    const headerRow = table.insertRow();
-    const headers = ['Username', 'Email', 'Role ID', 'API Calls'];
-    headers.forEach(headerText => {
-        const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
-    });
     users.forEach(user => {
-        const row = table.insertRow();
-        const userData = [user.username, user.email, user.role_id, user.api_call_count];
-        userData.forEach(text => {
-            const cell = row.insertCell();
-            cell.textContent = text;
-        });
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${user.username}</td>
+            <td>${user.email}</td>
+            <td>${user.role_id}</td>
+            <td>${user.api_call_count}</td>
+            <td><button onclick="deleteUser('${user._id}')">Delete</button></td>
+        `;
+        userListDiv.appendChild(row);
     });
-    userListDiv.appendChild(table);
 }
+
+async function deleteUser(userId) {
+    try {
+        const token = sessionStorage.getItem('token');
+        const response = await fetch(`${BASEURL}/delete-user/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (response.status === 200) {
+            // Refresh user list after successful deletion
+            fetchUsers();
+        } else {
+            displayErrorAlert('Failed to delete user');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        displayErrorAlert('An error occurred while deleting user.');
+    }
+}
+
 
 function displayErrorAlert(message) {
     const alertDiv = document.createElement('div');
