@@ -64,8 +64,10 @@ async function makeAPICall(textInputValue) {
 }
 
 function updateApiCount(currentCalls) {
-    document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + maxAPIcalls - currentCalls;
+    const remainingCalls = maxAPIcalls - currentCalls; 
+    document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + remainingCalls;
 }
+
 
 // Event listener for text input form submission
 document.getElementById('textInputForm').addEventListener('submit', handleTextInput);
