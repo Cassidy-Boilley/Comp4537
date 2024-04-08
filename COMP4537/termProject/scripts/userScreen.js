@@ -52,7 +52,7 @@ async function makeAPICall(textInputValue) {
         const result = await response.json();
         
        
-        updateApiCount(Number(result.apiCount));
+        let remainingCalls = updateApiCount(Number(result.apiCount));
         if (remainingCalls === 0) {
             document.getElementById('submitButton').disabled = true;
             alert('You have reached the maximum number of API calls.');
@@ -66,6 +66,7 @@ async function makeAPICall(textInputValue) {
 function updateApiCount(currentCalls) {
     const remainingCalls = maxAPIcalls - currentCalls; 
     document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + remainingCalls;
+    return remainingCalls;
 }
 
 
