@@ -52,6 +52,8 @@ async function registerUser(formData) {
         alert('An error occurred. Please try again later.');
     }
 }
-
+document.addEventListener('DOMContentLoaded', function () {
+    sessionStorage.clear();
+});
 // Event listener for registration form submission
 document.getElementById('registrationForm').addEventListener('submit', handleRegistration);

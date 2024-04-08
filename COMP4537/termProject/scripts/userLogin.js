@@ -36,6 +36,8 @@ function sendLoginRequest(username, password) {
         }
     };
 }
-
+document.addEventListener('DOMContentLoaded', function () {
+    sessionStorage.clear();
+});
 // Event listener for login form submission
 document.getElementById('loginForm').addEventListener('submit', handleLogin);
