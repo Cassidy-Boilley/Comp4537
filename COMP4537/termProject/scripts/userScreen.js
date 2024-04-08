@@ -25,10 +25,7 @@ async function handleTextInput(event) {
     newInputMessage.textContent = "You: " + textInputValue
     scrollable.appendChild(newInputMessage)
     showLoadingSpinner(); // Show spinner
-    const textOutputValue = await makeAPICall(textInputValue);
-    const newOutputMessage = document.createElement('p')
-    newOutputMessage.textContent = "Ai: " + textOutputValue
-    scrollable.appendChild(newOutputMessage)
+    await makeAPICall(textInputValue);
     hideLoadingSpinner(); // Hide spinner
 }
 
@@ -56,6 +53,10 @@ async function makeAPICall(textInputValue) {
         });
         const result = await response.json();
         alert('Generated Text: ' + result.response[0].generated_text);
+        const scrollable = document.getElementById('conversation');
+        const newOutputMessage = document.createElement('p')
+        newOutputMessage.textContent = "Ai: " + result.response[0].generated_text
+        scrollable.appendChild(newOutputMessage)
         const remainingCalls = maxAPIcalls - Number(result.apiCount);
         updateApiCount(remainingCalls);
         if (remainingCalls === 0) {
