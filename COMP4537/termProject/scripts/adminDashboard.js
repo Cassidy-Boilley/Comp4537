@@ -28,16 +28,18 @@ function displayUsers(users) {
     userListDiv.innerHTML = '';
     users.forEach(user => {
         const row = document.createElement('tr');
+        const role = user.role_id === 2 ? 'admin' : 'user'; // Convert role_id to role string
         row.innerHTML = `
             <td>${user.username}</td>
             <td>${user.email}</td>
-            <td>${user.role_id}</td>
+            <td>${role}</td> 
             <td>${user.api_call_count}</td>
             <td><button onclick="deleteUser('${user._id}')">Delete</button></td>
         `;
         userListDiv.appendChild(row);
     });
 }
+
 
 async function deleteUser(userId) {
     try {
