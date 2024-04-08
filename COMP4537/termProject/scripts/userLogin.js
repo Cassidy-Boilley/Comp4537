@@ -22,8 +22,6 @@ function sendLoginRequest(username, password) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
                 const role = response.role;
-                const token = response.token;
-                sessionStorage.setItem('token', token);
                 alert(response.message);
                 if (role === 'user') {
                     window.location.href = './user.html';
