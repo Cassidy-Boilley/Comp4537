@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             credentials: 'include'
         });
         const { apiCount } = await response.json();
-        document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' + apiCount - MAXAPICALLS;
+        document.getElementById('apiCountContainer').textContent = 'Remaining API calls: ' +  - Number(apiCount);
     } catch (error) {
         console.error('Error:', error);
         alert('An error occurred while fetching the API count. Please try again later.');
